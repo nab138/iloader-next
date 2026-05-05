@@ -5,6 +5,17 @@ const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
   clearScreen: false,
+  plugins: [
+    {
+      name: "watch-wasm",
+      enforce: "post",
+      handleHotUpdate({ file, server }) {
+        if (file.endsWith(".wasm") || file.includes("/wasm/")) {
+          server.ws.send({ type: "full-reload", path: "*" });
+        }
+      },
+    },
+  ],
   resolve: {
     alias: {
       "iloader-wasm": path.resolve(__dirname, "./wasm"),
