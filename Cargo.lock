@@ -1635,7 +1635,6 @@ name = "iloader-wasm"
 version = "0.1.0"
 dependencies = [
  "iloader-core",
- "reqwest",
  "wasm-bindgen",
 ]
 
