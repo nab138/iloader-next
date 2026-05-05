@@ -7,12 +7,11 @@
     "dev": "vite --port 5173",
     "build": "tsc && vite build",
     "wasm:build": "wasm-pack build ../rust/wasm --out-dir ../../frontend/wasm --target web --out-name iloader",
-    "tauri:dev": "cargo tauri dev",
+    "tauri:dev": "cargo tauri dev --additional-watch-folders ../rust/iloader-core/src",
     "tauri:build": "cargo tauri build"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.11.0",
-    "iloader-wasm": "./wasm",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

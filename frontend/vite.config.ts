@@ -1,9 +1,15 @@
 import { defineConfig } from "vite";
+import path from "path";
 
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
   clearScreen: false,
+  resolve: {
+    alias: {
+      "iloader-wasm": path.resolve(__dirname, "./wasm"),
+    },
+  },
   server: {
     host: host || false,
     hmr: host
