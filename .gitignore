@@ -1,0 +1,12 @@
+# Rust
+target/
+
+# wasm-pack output (always regenerated from source)
+frontend/wasm/
+
+# JS
+node_modules/
+frontend/dist/
+
+# Tauri
+frontend/src-tauri/gen/

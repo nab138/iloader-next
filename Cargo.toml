@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "rust/iloader-core",
+    "rust/wasm",
+    "rust/server",
+    "frontend/src-tauri",
+]
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.13", features = ["json"] }

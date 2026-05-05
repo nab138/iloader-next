@@ -1,0 +1,25 @@
+[package]
+name = "iloader_tauri"
+version = "0.1.0"
+description = ""
+authors = ["nab138"]
+license = ""
+repository = ""
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "iloader_tauri_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.6.0", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde.workspace  = true
+log = "0.4"
+tauri = { version = "2.11.0", features = [] }
+iloader-core     = { path = "../../rust/iloader-core" }
+reqwest.workspace = true
