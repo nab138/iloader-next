@@ -20,7 +20,25 @@ Layout:
 
 ### Development
 
-For your convenience, a `dev` script is available to handle compiling the wasm, running the Tauri desktop app, and starting the web server. It will watch for changes and automatically rebuild as needed. It's very janky though
+For your convenience, a `dev` script is available to handle compiling the wasm, running the Tauri desktop app, and starting the web server. It will watch for changes and automatically rebuild as needed. It's very janky though.
+
+This guide assumes you have [bun](https://bun.sh) and [rust](https://rust-lang.org/learn/get-started/) installed.
+
+Install dependencies:
 ```
-bun dev
+bun i && cd frontend && bun i && cd ..
 ```
+Install wasm-pack:
+```
+cargo install wasm-pack
+```
+Install Tauri CLI:
+```
+cargo install tauri-cli
+```
+
+Start dev server:
+```
+RUSTFLAGS="--cfg=web_sys_unstable_apis" bun dev
+```
+You can also add the rustflags to your global cargo config to avoid having to specify it manually.
