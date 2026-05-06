@@ -1,0 +1,36 @@
+.title-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.title-block h1 {
+    padding: 0;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+
+.title-block img {
+    width: 3.2rem;
+    height: 3.2rem;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    margin: 0;
+    color: var(--muted-text-color);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+main {
+    padding: 10px;
+}
