@@ -9,3 +9,47 @@ crate-type = ["cdylib"]
 [dependencies]
 iloader-core = { path = "../iloader-core" }
 wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+idevice.workspace = true
+js-sys = "0.3.97"
+netmuxd.workspace = true
+nusb.workspace = true
+uuid = { version = "1", features = ["v4", "js"] }
+
+tokio = { version = "1", default-features = false, features = ["sync", "macros", "io-util"] }
+log = "0.4"
+console_log = "1"
+console_error_panic_hook = "0.1"
+getrandom_02 = { package = "getrandom", version = "0.2", default-features = false, features = [
+  "js",
+]}
+getrandom_04 = { package = "getrandom", version = "0.4", default-features = false, features = [
+  "wasm_js",
+] }
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "Document",
+    "Window",
+    "Element",
+    "HtmlElement",
+    "HtmlAnchorElement",
+    "HtmlButtonElement",
+    "HtmlInputElement",
+    "Navigator",
+    "Usb",
+    "UsbDevice",
+    "UsbDeviceFilter",
+    "UsbDeviceRequestOptions",
+    "Storage",
+    "Blob",
+    "BlobPropertyBag",
+    "Url",
+    "File",
+    "FileList",
+    "FileReader",
+    "Event",
+    "EventTarget",
+    "console",
+]

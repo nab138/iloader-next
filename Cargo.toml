@@ -11,3 +11,6 @@ members = [
 serde = { version = "1", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
 reqwest = { version = "0.13", features = ["json"] }
+idevice = { version = "0.1.60", default-features = false, features = ["heartbeat", "pair", "wasm"] }
+netmuxd = { git = "https://github.com/jkcoxson/netmuxd/", version = "0.3.2", branch = "usb", features = ["wasm"] }
+nusb = { git = "https://github.com/jkcoxson/nusb", branch = "webusb", default-features = false }

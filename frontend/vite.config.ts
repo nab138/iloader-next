@@ -1,11 +1,13 @@
 import { defineConfig } from "vite";
 import path from "path";
+import react from "@vitejs/plugin-react";
 
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
   clearScreen: false,
   plugins: [
+    react(),
     {
       name: "watch-wasm",
       enforce: "post",

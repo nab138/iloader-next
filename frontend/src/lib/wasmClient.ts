@@ -1,4 +1,4 @@
-import initWasm, { transform } from "iloader-wasm";
+import initWasm, { read_lockdown, connect_idevice } from "iloader-wasm";
 import type { iloaderAPI } from "./client";
 
 export const wasmClient: iloaderAPI = {
@@ -6,7 +6,11 @@ export const wasmClient: iloaderAPI = {
     await initWasm();
   },
 
-  async transform(input: string): Promise<string> {
-    return transform(input);
+  async connectIdevice(): Promise<void> {
+    return connect_idevice();
+  },
+
+  async readLockdown(): Promise<string> {
+    return read_lockdown();
   },
 };

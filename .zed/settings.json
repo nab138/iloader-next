@@ -1,0 +1,13 @@
+{
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "cargo": {
+          "extraEnv": {
+            "RUSTFLAGS": "--cfg=web_sys_unstable_apis",
+          },
+        },
+      },
+    },
+  },
+}

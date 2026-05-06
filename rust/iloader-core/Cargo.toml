@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 serde.workspace = true
+idevice.workspace = true
+plist = "1.8"

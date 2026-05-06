@@ -4,7 +4,11 @@ import type { iloaderAPI } from "./client";
 export const tauriClient: iloaderAPI = {
   async init() {},
 
-  async transform(input: string): Promise<string> {
-    return invoke("transform", { input });
+  async connectIdevice(): Promise<void> {
+    return invoke("connect_idevice");
+  },
+
+  async readLockdown(): Promise<string> {
+    return invoke("read_lockdown");
   },
 };
