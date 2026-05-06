@@ -1,49 +1,52 @@
 import { useState } from "react";
 import "./App.css";
 import { client } from "./main";
-import logo from "./assets/iloader.svg";
 import { Button } from "@/components/ui/button";
+import Header from "./parts/Header";
+import { toast } from "sonner"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
 
 function App() {
   const [connected, setConnected] = useState<boolean>(false);
-  const [failed, setFailed] = useState<string>("");
   const [lockdown, setLockdown] = useState<string>("");
   return (
     <>
-      <header>
-        <div className="title-block">
-          <img src={logo} alt="iloader" />
-          <div>
-            <h1>iloader</h1>
-            <span className="subtitle">Sideloading Companion</span>
-          </div>
-        </div>
-      </header>
+      <Header />
       <main>
-        <Button variant="outline" onClick={() => {
-          client.connectIdevice().then(() => {
-            setConnected(true);
-            setFailed("");
-          }).catch((err) => {
-            setFailed(err);
-          });
-        }}>Connect</Button>
-        <Button variant="outline" onClick={() => {
-          client.readLockdown().then((l) => {
-            setLockdown(l);
-          }).catch((err) => {
-            setFailed(err);
-          });
-        }}>Read Lockdown</Button>
-        <div>
-          {connected ? "Connected to idevice" : "Not connected"}
-        </div>
-        <div style={{ color: "red" }}>
-          {failed ? `Error: ${failed}` : ""}
-        </div>
-        <pre style={{ backgroundColor: "-moz-initial" }}>
-          {lockdown ? `${lockdown}` : "No lockdown data"}
-        </pre>
+        <Card>
+          <CardHeader>
+            <CardTitle>iDevice</CardTitle>
+            <CardDescription>Manage your iDevice</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4">
+              {connected ? "Connected to idevice" : "Not connected"}
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={() => {
+                client.connectIdevice().then(() => {
+                  setConnected(true);
+                  toast.success("Connected to idevice");
+                }).catch((err) => {
+                  toast.error(err);
+                });
+              }}>Connect</Button>
+              <Button variant="outline" onClick={() => {
+                client.readLockdown().then((l) => {
+                  setLockdown(l);
+                  toast.success("Lockdown data read successfully");
+                }).catch((err) => {
+                  toast.error(err);
+                });
+              }}>Read Lockdown</Button>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <pre style={{ backgroundColor: "-moz-initial" }}>
+              {lockdown ? `${lockdown}` : "No lockdown data"}
+            </pre>
+          </CardFooter>
+        </Card>
       </main>
     </>
   );
