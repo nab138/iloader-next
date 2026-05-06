@@ -4,10 +4,10 @@
       "initialization_options": {
         "cargo": {
           "extraEnv": {
-            "RUSTFLAGS": "--cfg=web_sys_unstable_apis",
-          },
-        },
-      },
-    },
-  },
+            "RUSTFLAGS": "--cfg=web_sys_unstable_apis"
+          }
+        }
+      }
+    }
+  }
 }
