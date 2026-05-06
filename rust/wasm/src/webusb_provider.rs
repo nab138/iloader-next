@@ -35,12 +35,13 @@ impl IdeviceProvider for WebUsbProvider {
         Box<dyn Future<Output = Result<idevice::Idevice, idevice::IdeviceError>> + Send>,
     > {
         let handle = self.handle.clone();
+        let label = self.label.clone();
         Box::pin(async move {
             let stream = handle
                 .connect(port)
                 .await
                 .map_err(|e| IdeviceError::UnknownErrorType(e.to_string()))?;
-            Ok(idevice::Idevice::new(Box::new(stream), "iloader-next"))
+            Ok(idevice::Idevice::new(Box::new(stream), label))
         })
     }
 
