@@ -14,7 +14,7 @@ Layout:
   - src-tauri # Tauri desktop app code, exposes tauri commands for iloader-core
 - rust
   - iloader-core # Core rust code powering both apps
-  - server # WIP proxy server for the rust app
+  - server # Proxy server for the web app
   - wasm # WASM bindings for iloader-core
 ```
 
