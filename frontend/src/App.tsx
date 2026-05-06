@@ -19,7 +19,7 @@ function App() {
             <CardDescription>Manage your iDevice</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="mb-4">
+            <div className="mb-2">
               {connected ? "Connected to idevice" : "Not connected"}
             </div>
             <div className="flex gap-2">

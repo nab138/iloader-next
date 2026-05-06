@@ -13,4 +13,8 @@ export const wasmClient: iloaderAPI = {
   async readLockdown(): Promise<string> {
     return read_lockdown();
   },
+
+  async openUrl(url: string): Promise<void> {
+    window.open(url, "_blank");
+  }
 };

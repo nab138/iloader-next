@@ -1,5 +1,6 @@
 export interface iloaderAPI {
   init(): Promise<void>;
+  openUrl(url: string): Promise<void>;
   connectIdevice(): Promise<void>;
   readLockdown(): Promise<string>;
 }

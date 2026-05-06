@@ -1,6 +1,10 @@
 
+import { Button } from "@/components/ui/button";
 import logo from "../assets/iloader.svg";
 import "./Header.css";
+import { client } from "@/main";
+import { ExternalLinkIcon } from "lucide-react";
+
 
 function Header() {
     return <header>
@@ -11,6 +15,7 @@ function Header() {
                 <span className="subtitle">Sideloading Companion</span>
             </div>
         </div>
+        <Button variant="ghost" onClick={() => client.openUrl("https://github.com/nab138/iloader-next")}>GitHub <ExternalLinkIcon /></Button>
     </header>
 }
 

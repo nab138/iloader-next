@@ -24,3 +24,5 @@ tauri = { version = "2.11.0", features = [] }
 iloader-core     = { path = "../../rust/iloader-core" }
 reqwest.workspace = true
 idevice = { workspace = true, features = ["usbmuxd", "aws-lc"] }
+tauri-plugin-shell = "2"
+tauri-plugin-opener = "2"
