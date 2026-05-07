@@ -26,3 +26,4 @@ reqwest.workspace = true
 idevice = { workspace = true, features = ["usbmuxd", "aws-lc"] }
 tauri-plugin-shell = "2"
 tauri-plugin-opener = "2"
+futures = "0.3.32"

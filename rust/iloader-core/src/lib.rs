@@ -1,5 +1,8 @@
 use idevice::{IdeviceService, lockdown::LockdownClient, provider::IdeviceProvider};
 
+pub mod device;
+pub mod error;
+
 pub async fn read_lockdown_values(provider: &dyn IdeviceProvider) -> Result<String, String> {
     let mut lockdown = LockdownClient::connect(provider)
         .await

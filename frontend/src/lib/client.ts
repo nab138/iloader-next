@@ -1,7 +1,19 @@
+export type DeviceInfo = {
+  udid: string;
+  name: string;
+  connection_type: "USB" | "Network" | "Unknown" | "WebUSB";
+  version: string;
+}
+
+export type GetDevicesResponse = {
+  devices: DeviceInfo[];
+  selected: number;
+}
+
 export interface iloaderAPI {
   init(): Promise<void>;
   openUrl(url: string): Promise<void>;
-  connectIdevice(): Promise<void>;
+  getDevices(): Promise<GetDevicesResponse>;
   readLockdown(): Promise<string>;
   login(email: string, password: string): Promise<void>;
 }

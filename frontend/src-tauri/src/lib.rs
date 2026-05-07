@@ -1,39 +1,14 @@
 use std::sync::Mutex;
 
-use idevice::{
-    provider::UsbmuxdProvider,
-    usbmuxd::{UsbmuxdAddr, UsbmuxdConnection},
-};
+use idevice::provider::UsbmuxdProvider;
 use iloader_core::read_lockdown_values;
 use tauri::{Manager, State};
 
+pub mod device;
 pub type ProviderMutex = Mutex<Option<UsbmuxdProvider>>;
 
-#[tauri::command]
-async fn connect_idevice(device_state: State<'_, ProviderMutex>) -> Result<(), String> {
-    let mut usbmuxd = UsbmuxdConnection::default()
-        .await
-        .map_err(|e| "Failed to connect to usbmuxd: ".to_string() + &e.to_string())?;
-
-    let devs = usbmuxd
-        .get_devices()
-        .await
-        .map_err(|e| "Failed to get devices: ".to_string() + &e.to_string())?;
-
-    if devs.is_empty() {
-        return Err("No devices found".to_string());
-    }
-
-    let usbmuxd_addr = UsbmuxdAddr::from_env_var()
-        .map_err(|e| "Invalid usbmuxd address from environment: ".to_string() + &e.to_string())?;
-
-    let dev = devs.first().unwrap();
-    let provider = dev.to_provider(usbmuxd_addr, "iloader-web");
-    let mut device_state = device_state.lock().unwrap();
-    *device_state = Some(provider);
-
-    Ok(())
-}
+// macro use
+use device::get_devices;
 
 #[tauri::command]
 async fn read_lockdown(device_state: State<'_, ProviderMutex>) -> Result<String, String> {
@@ -57,7 +32,7 @@ pub fn run() {
             app.manage(ProviderMutex::new(None));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![connect_idevice, read_lockdown])
+        .invoke_handler(tauri::generate_handler![get_devices, read_lockdown])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

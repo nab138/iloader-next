@@ -7,3 +7,6 @@ edition = "2024"
 serde.workspace = true
 idevice.workspace = true
 plist = "1.8"
+rootcause = "0.12.1"
+thiserror = "2.0.18"
+strum = { version = "0.28.0", features = ["derive"] }

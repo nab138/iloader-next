@@ -1,13 +1,13 @@
 import initWasm, { read_lockdown, connect_idevice, login } from "iloader-wasm";
-import type { iloaderAPI } from "./client";
+import type { GetDevicesResponse, iloaderAPI } from "./client";
 
 export const wasmClient: iloaderAPI = {
   async init() {
     await initWasm();
   },
 
-  async connectIdevice(): Promise<void> {
-    return connect_idevice();
+  async getDevices(): Promise<GetDevicesResponse> {
+    throw new Error("Not implemented");
   },
 
   async readLockdown(): Promise<string> {
