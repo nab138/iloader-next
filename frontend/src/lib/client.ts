@@ -3,6 +3,7 @@ export interface iloaderAPI {
   openUrl(url: string): Promise<void>;
   connectIdevice(): Promise<void>;
   readLockdown(): Promise<string>;
+  login(email: string, password: string): Promise<void>;
 }
 
 let clientInstance: iloaderAPI | null = null;

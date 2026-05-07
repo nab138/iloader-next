@@ -14,6 +14,7 @@ idevice.workspace = true
 js-sys = "0.3.97"
 netmuxd.workspace = true
 nusb.workspace = true
+# isideload = { version = "0.2.22", path = "../../../isideload/isideload" }
 uuid = { version = "1", features = ["v4", "js"] }
 
 tokio = { version = "1", default-features = false, features = ["sync", "macros", "io-util"] }

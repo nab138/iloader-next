@@ -11,7 +11,6 @@ pub type ProviderMutex = Mutex<Option<UsbmuxdProvider>>;
 
 #[tauri::command]
 async fn connect_idevice(device_state: State<'_, ProviderMutex>) -> Result<(), String> {
-    println!("connect_idevice called");
     let mut usbmuxd = UsbmuxdConnection::default()
         .await
         .map_err(|e| "Failed to connect to usbmuxd: ".to_string() + &e.to_string())?;

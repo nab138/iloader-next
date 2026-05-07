@@ -1,4 +1,4 @@
-import initWasm, { read_lockdown, connect_idevice } from "iloader-wasm";
+import initWasm, { read_lockdown, connect_idevice, login } from "iloader-wasm";
 import type { iloaderAPI } from "./client";
 
 export const wasmClient: iloaderAPI = {
@@ -16,5 +16,9 @@ export const wasmClient: iloaderAPI = {
 
   async openUrl(url: string): Promise<void> {
     window.open(url, "_blank");
-  }
+  },
+
+  async login(email: string, password: string): Promise<void> {
+    return login(email, password);
+  },
 };

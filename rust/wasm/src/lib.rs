@@ -28,3 +28,9 @@ pub async fn read_lockdown() -> Result<String, String> {
 
     read_lockdown_values(provider).await
 }
+
+#[wasm_bindgen]
+pub async fn login(email: String, password: String) -> Result<(), String> {
+    // isideload::init();
+    Ok(())
+}

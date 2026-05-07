@@ -3,7 +3,7 @@ import type { iloaderAPI } from "./client";
 import { openUrl } from "@tauri-apps/plugin-opener";
 
 export const tauriClient: iloaderAPI = {
-  async init() { },
+  async init() {},
 
   async connectIdevice(): Promise<void> {
     return invoke("connect_idevice");
@@ -15,5 +15,9 @@ export const tauriClient: iloaderAPI = {
 
   async openUrl(url: string): Promise<void> {
     return openUrl(url);
-  }
+  },
+
+  async login(email: string, password: string): Promise<void> {
+    return invoke("login", { email, password });
+  },
 };
