@@ -2,17 +2,20 @@ use idevice::Idevice;
 use idevice::pairing_file::PairingFile;
 use idevice::{IdeviceError, lockdown::LockdownClient};
 
+use iloader_core::error::AppError;
 use netmuxd::usb::apple::{self, APPLE_VID};
 use netmuxd::usb::mux::UsbMuxHandle;
 use netmuxd::usb::provider::UsbMuxProvider;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{UsbDeviceFilter, UsbDeviceRequestOptions, console};
 
-pub async fn get_webusb_provider(label: &str) -> Result<UsbMuxProvider, String> {
-    request_permission().await?;
+pub async fn get_webusb_provider(label: &str) -> Result<UsbMuxProvider, AppError> {
+    request_permission().await.map_err(AppError::WebUSB)?;
 
-    let handle = open_mux_handle().await?;
-    let pairing = pair_device(&handle, label).await?;
+    let handle = open_mux_handle().await.map_err(AppError::WebUSB)?;
+    let pairing = pair_device(&handle, label)
+        .await
+        .map_err(AppError::WebUSB)?;
 
     Ok(UsbMuxProvider::new(handle, pairing, label.to_string()))
 }

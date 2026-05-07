@@ -3,6 +3,7 @@
 use rootcause::Report;
 use serde::Serialize;
 use serde::ser::{SerializeStruct, Serializer};
+use wasm_bindgen::JsValue;
 
 #[derive(Debug, thiserror::Error, Clone, strum::AsRefStr)]
 #[strum(serialize_all = "snake_case")]
@@ -53,6 +54,8 @@ pub enum AppError {
     Misc(String),
     #[error("{0}: {1}")]
     Filesystem(String, String),
+    #[error("WebUSB error: {0}")]
+    WebUSB(String),
 }
 
 impl Serialize for AppError {
@@ -117,5 +120,19 @@ impl From<Report> for AppError {
         }
 
         AppError::Misc(report_str)
+    }
+}
+
+pub struct WasmError(pub AppError);
+
+impl From<AppError> for WasmError {
+    fn from(err: AppError) -> Self {
+        WasmError(err)
+    }
+}
+
+impl From<WasmError> for JsValue {
+    fn from(err: WasmError) -> Self {
+        serde_wasm_bindgen::to_value(&err.0).unwrap_or_else(|_| JsValue::from_str("Unknown error"))
     }
 }
