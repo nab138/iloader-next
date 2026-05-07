@@ -43,8 +43,8 @@ function Devices() {
             <Button onClick={async () => {
                 try {
                     const response = await client.getDevices();
-                    setDevices(response.devices);
-                    let len = response.devices.length;
+                    setDevices(response);
+                    let len = response.length;
                     if (len === 0) {
                         toast.warning("No devices found");
                     } else {

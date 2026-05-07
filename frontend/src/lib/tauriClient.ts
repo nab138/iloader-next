@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { DeviceInfo, GetDevicesResponse, iloaderAPI } from "./client";
+import type { DeviceInfo, iloaderAPI } from "./client";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import type { AppError } from "./error";
 import { toast } from "sonner";
@@ -7,7 +7,7 @@ import { toast } from "sonner";
 export const tauriClient: iloaderAPI = {
   async init() { },
 
-  async getDevices(): Promise<GetDevicesResponse> {
+  async getDevices(): Promise<DeviceInfo[]> {
     let devices = await invoke<Array<{ Ok: DeviceInfo } | { Err: AppError }>>("get_devices");
 
     const validDevices: DeviceInfo[] = [];
@@ -19,7 +19,7 @@ export const tauriClient: iloaderAPI = {
       }
     });
 
-    return { devices: validDevices, selected: -1 };
+    return validDevices;
   },
 
   async readLockdown(): Promise<string> {

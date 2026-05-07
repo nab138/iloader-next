@@ -5,15 +5,10 @@ export type DeviceInfo = {
   version: string;
 }
 
-export type GetDevicesResponse = {
-  devices: DeviceInfo[];
-  selected: number;
-}
-
 export interface iloaderAPI {
   init(): Promise<void>;
   openUrl(url: string): Promise<void>;
-  getDevices(): Promise<GetDevicesResponse>;
+  getDevices(): Promise<DeviceInfo[]>;
   readLockdown(): Promise<string>;
   login(email: string, password: string): Promise<void>;
 }
