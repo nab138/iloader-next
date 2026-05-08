@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { client } from "./main";
 import { Button } from "@/components/ui/button";
 import Header from "./parts/Header";
@@ -7,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
@@ -16,8 +14,6 @@ import { Field, FieldGroup, FieldLabel, FieldSet } from "./components/ui/field";
 import Devices from "./parts/Devices";
 
 function App() {
-  const [connected, setConnected] = useState<boolean>(false);
-  const [lockdown, setLockdown] = useState<string>("");
   return (
     <>
       <Header />

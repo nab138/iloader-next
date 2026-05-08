@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+
 use idevice::Idevice;
 use idevice::pairing_file::PairingFile;
 use idevice::{IdeviceError, lockdown::LockdownClient};
@@ -9,10 +11,19 @@ use netmuxd::usb::provider::UsbMuxProvider;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{UsbDeviceFilter, UsbDeviceRequestOptions, console};
 
-pub async fn get_webusb_provider(label: &str) -> Result<UsbMuxProvider, AppError> {
-    request_permission().await.map_err(AppError::WebUSB)?;
+thread_local! {
+    static MUX: RefCell<Option<UsbMuxHandle>> = const { RefCell::new(None) };
+}
 
-    let handle = open_mux_handle().await.map_err(AppError::WebUSB)?;
+fn get_mux() -> Result<UsbMuxHandle, String> {
+    MUX.with(|m| m.borrow().clone())
+        .ok_or_else(|| "Select a device first".to_string())
+}
+
+pub async fn get_webusb_provider(label: &str) -> Result<UsbMuxProvider, AppError> {
+    connect_iphone().await.map_err(AppError::WebUSB)?;
+
+    let handle = get_mux().map_err(AppError::WebUSB)?;
     let pairing = pair_device(&handle, label)
         .await
         .map_err(AppError::WebUSB)?;
@@ -20,7 +31,12 @@ pub async fn get_webusb_provider(label: &str) -> Result<UsbMuxProvider, AppError
     Ok(UsbMuxProvider::new(handle, pairing, label.to_string()))
 }
 
-async fn request_permission() -> Result<(), String> {
+async fn connect_iphone() -> Result<(), String> {
+    if MUX.with(|m| m.borrow().is_some()) {
+        console::log_1(&"Mux already open. Reload the page to reconnect.".into());
+        return Ok(());
+    }
+
     let usb = web_sys::window()
         .ok_or_else(|| "no window".to_string())?
         .navigator()
@@ -36,18 +52,12 @@ async fn request_permission() -> Result<(), String> {
         .await
         .map_err(|e| format!("requestDevice: {e:?}"))?;
     console::log_1(&"Permission granted.".into());
-    Ok(())
-}
-
-async fn open_mux_handle() -> Result<UsbMuxHandle, String> {
     console::log_1(&"Listing devices via nusb…".into());
     let info = nusb::list_devices()
         .await
         .map_err(|e| format!("list_devices: {e}"))?
         .find(apple::is_apple_mux)
-        .ok_or_else(|| {
-            "no Apple usbmuxd device permitted; click Connect iPhone first".to_string()
-        })?;
+        .ok_or_else(|| "no Apple usbmuxd device permitted".to_string())?;
 
     console::log_1(
         &format!(
@@ -74,13 +84,11 @@ async fn open_mux_handle() -> Result<UsbMuxHandle, String> {
 
     console::log_1(&"Spawning usbmuxd-v2 mux task…".into());
     let (exit_tx, _exit_rx) = tokio::sync::oneshot::channel();
-    Ok(netmuxd::usb::mux::spawn(
-        1,
-        serial.clone(),
-        opened.reader,
-        opened.writer,
-        exit_tx,
-    ))
+    let handle = netmuxd::usb::mux::spawn(1, serial, opened.reader, opened.writer, exit_tx);
+
+    MUX.with(|m| *m.borrow_mut() = Some(handle));
+    console::log_1(&"Mux task ready.".into());
+    Ok(())
 }
 
 async fn open_lockdown(handle: &UsbMuxHandle, label: &str) -> Result<LockdownClient, IdeviceError> {

@@ -5,10 +5,13 @@ import type { AppError } from "./error";
 import { toast } from "sonner";
 
 export const tauriClient: iloaderAPI = {
-  async init() { },
+  async init() {},
 
   async getDevices(): Promise<DeviceInfo[]> {
-    let devices = await invoke<Array<{ Ok: DeviceInfo } | { Err: AppError }>>("get_devices");
+    const devices =
+      await invoke<Array<{ Ok: DeviceInfo } | { Err: AppError }>>(
+        "get_devices",
+      );
 
     const validDevices: DeviceInfo[] = [];
     devices.forEach((result, index) => {
