@@ -18,7 +18,16 @@ export const wasmClient: iloaderAPI = {
     window.open(url, "_blank");
   },
 
-  async login(email: string, password: string): Promise<void> {
-    return login(email, password);
+  async login(
+    email: string,
+    password: string,
+    get2FA: () => Promise<string>,
+  ): Promise<void> {
+    try {
+      await login(email, password, get2FA);
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
   },
 };

@@ -3,7 +3,6 @@ resolver = "2"
 members = [
     "rust/iloader-core",
     "rust/wasm",
-    "rust/server",
     "frontend/src-tauri",
 ]
 

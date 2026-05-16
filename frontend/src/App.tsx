@@ -6,20 +6,24 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
 import { Input } from "./components/ui/input";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "./components/ui/field";
 import Devices from "./parts/Devices";
+import { useState } from "react";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <>
       <Header />
-      <main className="flex gap-5 flex-col m-2 mt-3">
-        <Devices />
-        <Card>
+      <main className="flex gap-5 m-2 mt-3 flex-wrap">
+        <Card className="w-full md:w-[300px] lg:w-[500px]">
           <CardHeader>
             <CardTitle>Apple ID</CardTitle>
             <CardDescription>
@@ -27,20 +31,20 @@ function App() {
               Apple.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const email = formData.get("account-email") as string;
-                const password = formData.get("account-password") as string;
-                toast.promise(client.login(email, password), {
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              toast.promise(
+                client.login(email, password, () => Promise.resolve("123456")),
+                {
                   loading: "Logging in...",
                   success: "Logged in successfully!",
                   error: (e) => e,
-                });
-              }}
-            >
+                },
+              );
+            }}
+          >
+            <CardContent>
               <FieldGroup>
                 <FieldSet>
                   <FieldGroup className="gap-4">
@@ -53,9 +57,11 @@ function App() {
                         placeholder="example@icloud.com"
                         type="email"
                         required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                     </Field>
-                    <Field>
+                    <Field className="mb-5">
                       <FieldLabel htmlFor="account-password">
                         Password
                       </FieldLabel>
@@ -64,18 +70,23 @@ function App() {
                         placeholder="Apple ID password..."
                         type="password"
                         required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                     </Field>
                   </FieldGroup>
                 </FieldSet>
-
-                <Field orientation="horizontal">
-                  <Button type="submit">Login</Button>
-                </Field>
               </FieldGroup>
-            </form>
-          </CardContent>
+            </CardContent>
+            <CardFooter>
+              <Field>
+                <Button type="submit">Login</Button>
+              </Field>
+            </CardFooter>
+          </form>
         </Card>
+
+        <Devices />
       </main>
     </>
   );

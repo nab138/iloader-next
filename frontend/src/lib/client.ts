@@ -3,14 +3,18 @@ export type DeviceInfo = {
   name: string;
   connection_type: "USB" | "Network" | "Unknown" | "WebUSB";
   version: string;
-}
+};
 
 export interface iloaderAPI {
   init(): Promise<void>;
   openUrl(url: string): Promise<void>;
   getDevices(): Promise<DeviceInfo[]>;
   readLockdown(): Promise<string>;
-  login(email: string, password: string): Promise<void>;
+  login(
+    email: string,
+    password: string,
+    get2FA: () => Promise<string>,
+  ): Promise<void>;
 }
 
 let clientInstance: iloaderAPI | null = null;

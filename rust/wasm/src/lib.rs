@@ -8,12 +8,23 @@ use iloader_core::{
     error::{AppError, WasmError},
     read_lockdown_values,
 };
+use isideload::{
+    anisette::remote_v3::RemoteV3AnisetteProvider,
+    auth::{apple_account::AppleAccount, builder::AppleAccountBuilder},
+};
 use netmuxd::usb::provider::UsbMuxProvider;
 use wasm_bindgen::prelude::*;
+use web_sys::console;
 
 use crate::webusb::get_webusb_provider;
 
 static IDEVICE: OnceLock<Mutex<Option<UsbMuxProvider>>> = OnceLock::new();
+
+#[wasm_bindgen(start)]
+pub fn main() {
+    console_error_panic_hook::set_once();
+    isideload::init();
+}
 
 #[wasm_bindgen]
 pub async fn get_devices() -> Result<JsValue, WasmError> {
@@ -87,7 +98,17 @@ pub async fn read_lockdown() -> Result<String, String> {
 }
 
 #[wasm_bindgen]
-pub async fn login(email: String, password: String) -> Result<(), String> {
-    // isideload::init();
+pub async fn login(
+    email: String,
+    password: String,
+    two_factor_callback: js_sys::Function,
+) -> Result<(), String> {
+    let account = AppleAccountBuilder::new(&email)
+        .login(&password, || None)
+        .await
+        .map_err(|e| {
+            console::log_1(&format!("Login failed: {e:?}").into());
+            "Login failed".to_string()
+        })?;
     Ok(())
 }

@@ -12,19 +12,18 @@ import { client } from "@/main";
 import { CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import type { AppError } from "@/lib/error";
 
 function Devices() {
   const [devices, setDevices] = useState<DeviceInfo[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<DeviceInfo | null>(null);
 
   return (
-    <Card>
+    <Card className="flex-grow flex flex-col">
       <CardHeader>
         <CardTitle>iDevice</CardTitle>
         <CardDescription>Choose a device</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow">
         <div className="flex flex-col gap-2">
           {devices.length === 0 && (
             <div className="text-base">No devices found</div>
@@ -73,7 +72,7 @@ function Devices() {
             } catch (e) {
               console.log(e);
               if (e instanceof Object && "message" in e) {
-                toast.error(e.message);
+                toast.error(e.message as string);
               } else {
                 toast.error("Failed to get devices: " + e);
               }
