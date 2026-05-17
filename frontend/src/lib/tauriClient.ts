@@ -3,6 +3,7 @@ import type { DeviceInfo, iloaderAPI } from "./client";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import type { AppError } from "./error";
 import { toast } from "sonner";
+import { emit, listen } from "@tauri-apps/api/event";
 
 export const tauriClient: iloaderAPI = {
   async init() {},
@@ -33,7 +34,28 @@ export const tauriClient: iloaderAPI = {
     return openUrl(url);
   },
 
-  async login(email: string, password: string): Promise<void> {
-    return invoke("login", { email, password });
+  async login(
+    email: string,
+    password: string,
+    get2FA: () => Promise<string | null>,
+  ): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      const unlisten = await listen("2fa-required", async () => {
+        try {
+          const code = await get2FA();
+          await emit("2fa-recieved", code);
+        } catch (e) {
+          reject(e);
+        }
+      });
+      await invoke("login", { email, password });
+
+      await unlisten();
+
+      resolve();
+    });
+  },
+  logged_in_as: async function (): Promise<string | null> {
+    return invoke<string | null>("logged_in_as");
   },
 };

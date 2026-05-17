@@ -18,12 +18,12 @@ function Devices() {
   const [selectedDevice, setSelectedDevice] = useState<DeviceInfo | null>(null);
 
   return (
-    <Card className="flex-grow flex flex-col">
+    <Card className="flex-grow flex flex-col h-full">
       <CardHeader>
-        <CardTitle>iDevice</CardTitle>
+        <CardTitle className="text-xl">iDevice</CardTitle>
         <CardDescription>Choose a device</CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent>
         <div className="flex flex-col gap-2">
           {devices.length === 0 && (
             <div className="text-base">No devices found</div>
@@ -42,12 +42,12 @@ function Devices() {
               )}
               <div className="flex flex-col items-start">
                 <div className="text-base">{device.name}</div>
-                <div className="text-xs font-normal opacity-70">
+                <div className="text-xs font-normal text-muted-foreground">
                   {device.udid}
                 </div>
               </div>
 
-              <div className="ml-auto flex flex-col items-end text-sm font-normal opacity-70">
+              <div className="ml-auto flex flex-col items-end text-sm font-normal text-muted-foreground">
                 <div>{device.version}</div>
                 <div>{device.connection_type}</div>
               </div>

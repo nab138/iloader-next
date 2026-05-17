@@ -1,5 +1,5 @@
-// use idevice::IdeviceError;
-//use isideload::SideloadError;
+use idevice::IdeviceError;
+use isideload::SideloadError;
 use rootcause::Report;
 use serde::Serialize;
 use serde::ser::{SerializeStruct, Serializer};
@@ -51,6 +51,8 @@ pub enum AppError {
     #[error("{0}: {1}")]
     Storage(String, String),
     #[error("{0}")]
+    LocalStorage(String),
+    #[error("{0}")]
     Misc(String),
     #[error("{0}: {1}")]
     Filesystem(String, String),
@@ -79,34 +81,34 @@ impl From<Report> for AppError {
             // if cause.downcast_current_context::<keyring::Error>().is_some() {
             //     return AppError::Keyring(report_str);
             // }
-            // if let Some(err) = cause.downcast_current_context::<SideloadError>() {
-            //     match err {
-            //         &SideloadError::AuthWithMessage(code, _) => match code {
-            //             -20209 => return AppError::AccountLocked(report_str),
-            //             _ => {
-            //                 return AppError::Auth(report_str);
-            //             }
-            //         },
-            //         &SideloadError::DeveloperError(code, _) => match code {
-            //             1102 => return AppError::Underage(report_str),
-            //             _ => {
-            //                 return AppError::Developer(report_str);
-            //             }
-            //         },
-            //         SideloadError::IdeviceError(idev_err) => match idev_err {
-            //             IdeviceError::Socket(_) => {
-            //                 return AppError::DeviceComs(report_str);
-            //             }
-            //             IdeviceError::ApplicationVerificationFailed(e) => {
-            //                 if e.contains("maximum number of installed apps") {
-            //                     return AppError::MaxApps(report_str);
-            //                 }
-            //             }
-            //             _ => {}
-            //         },
-            //         _ => {}
-            //     }
-            // }
+            if let Some(err) = cause.downcast_current_context::<SideloadError>() {
+                match err {
+                    &SideloadError::AuthWithMessage(code, _) => match code {
+                        -20209 => return AppError::AccountLocked(report_str),
+                        _ => {
+                            return AppError::Auth(report_str);
+                        }
+                    },
+                    &SideloadError::DeveloperError(code, _) => match code {
+                        1102 => return AppError::Underage(report_str),
+                        _ => {
+                            return AppError::Developer(report_str);
+                        }
+                    },
+                    SideloadError::IdeviceError(idev_err) => match idev_err {
+                        IdeviceError::Socket(_) => {
+                            return AppError::DeviceComs(report_str);
+                        }
+                        IdeviceError::ApplicationVerificationFailed(e) => {
+                            if e.contains("maximum number of installed apps") {
+                                return AppError::MaxApps(report_str);
+                            }
+                        }
+                        _ => {}
+                    },
+                    _ => {}
+                }
+            }
             let cause_str = cause.to_string();
             if cause_str.contains("Not enough available app IDs") {
                 return AppError::NotEnoughAppIds(report_str);
@@ -134,5 +136,11 @@ impl From<AppError> for WasmError {
 impl From<WasmError> for JsValue {
     fn from(err: WasmError) -> Self {
         serde_wasm_bindgen::to_value(&err.0).unwrap_or_else(|_| JsValue::from_str("Unknown error"))
+    }
+}
+
+impl From<Report> for WasmError {
+    fn from(report: Report) -> Self {
+        WasmError(AppError::from(report))
     }
 }

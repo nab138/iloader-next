@@ -8,8 +8,9 @@ members = [
 
 [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }
-tokio = { version = "1", features = ["full"] }
-reqwest = { version = "0.13", features = ["json"] }
-idevice = { version = "0.1.60", default-features = false, features = ["heartbeat", "pair", "wasm"] }
-netmuxd = { git = "https://github.com/jkcoxson/netmuxd/", version = "0.3.2", branch = "usb", features = ["wasm"] }
+tokio = { version = "1" }
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls-no-provider", "http2", "charset", "system-proxy"]}
+idevice = { version = "0.1.60", default-features = false, features = ["heartbeat", "pair", "wasm", "ring"] }
+# netmuxd = { git = "https://github.com/jkcoxson/netmuxd/", version = "0.3.2", branch = "usb", features = ["wasm"] }
+netmuxd = { path = "../netmuxd", version = "0.3.2", features = ["wasm"] }
 nusb = { git = "https://github.com/jkcoxson/nusb", branch = "webusb", default-features = false }

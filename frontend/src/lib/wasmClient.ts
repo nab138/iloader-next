@@ -1,4 +1,9 @@
-import initWasm, { read_lockdown, get_devices, login } from "iloader-wasm";
+import initWasm, {
+  read_lockdown,
+  get_devices,
+  login,
+  logged_in_as,
+} from "iloader-wasm";
 import type { DeviceInfo, iloaderAPI } from "./client";
 
 export const wasmClient: iloaderAPI = {
@@ -23,11 +28,16 @@ export const wasmClient: iloaderAPI = {
     password: string,
     get2FA: () => Promise<string>,
   ): Promise<void> {
-    try {
-      await login(email, password, get2FA);
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
-    }
+    return login(email, password, get2FA);
+  },
+  logged_in_as: async function (): Promise<string | null> {
+    return new Promise(async (resolve) => {
+      const result = await logged_in_as();
+      if (result === undefined) {
+        resolve(null);
+        return;
+      }
+      resolve(result);
+    });
   },
 };

@@ -15,6 +15,7 @@ export interface iloaderAPI {
     password: string,
     get2FA: () => Promise<string>,
   ): Promise<void>;
+  logged_in_as(): Promise<string | null>;
 }
 
 let clientInstance: iloaderAPI | null = null;
